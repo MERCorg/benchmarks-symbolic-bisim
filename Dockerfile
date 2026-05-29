@@ -43,4 +43,4 @@ COPY ./cases /root/cases/
 COPY ./scripts /root/scripts/
 
 # Run the prepare script to generate all the symbolic inputs
-RUN python3 /root/scripts/prepare.py --mcrl2-path /root/mCRL2/build/stage/bin/ --merc-path /root/merc/target/release --input-dir /root/cases/ --output-dir /root/input
+RUN python3 /root/scripts/prepare.py --mcrl2-path /root/mCRL2/build/stage/bin/ --input-dir /root/cases/ --output-dir /root/input
