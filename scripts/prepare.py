@@ -292,10 +292,7 @@ class Preparer:
 
         self.gen_ertms()
 
-    def generate_all(self, files=None) -> None:
-        if files is None:
-            files = list(filter(os.path.isfile, os.listdir(os.curdir)))
-
+    def generate_all(self, files) -> None:
         files = strip_ext(list(set(files)), ".lps")
         for m in files:
             lps_file = m + ".lps"
@@ -346,4 +343,4 @@ if __name__ == "__main__":
         args.mcrl2_path,
     )
     preparer.prepare()
-    preparer.generate_all(os.listdir(args.output_dir))
+    preparer.generate_all(map(lambda f: os.path.join(args.output_dir, f), os.listdir(args.output_dir)))

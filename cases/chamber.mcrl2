@@ -40,7 +40,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % BEGIN RANDOM STATE CHANGES
 
     (isS_OFF(s) ->
-        sum s1: State.((rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OK(s1))) ->
+        sum s1: State.((actArgs_rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OK(s1))) ->
             ss43(self, parent, s1).
             move_state4(self, s1).
             RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase,
@@ -118,7 +118,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % BEGIN RANDOM STATE CHANGES
 
     (isS_STANDBY(s) ->
-        sum s1: State.((rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_UP(s1) || isS_RAMPING_DOWN(s1) || isS_OFF(s1) || isS_ON(s1))) ->
+        sum s1: State.((actArgs_rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_UP(s1) || isS_RAMPING_DOWN(s1) || isS_OFF(s1) || isS_ON(s1))) ->
             ss43(self, parent, s1).
             move_state4(self, s1).
             RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase,
@@ -196,7 +196,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % BEGIN RANDOM STATE CHANGES
 
     (isS_ON(s) ->
-        sum s1: State.((rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OFF(s1))) ->
+        sum s1: State.((actArgs_rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OFF(s1))) ->
             ss43(self, parent, s1).
             move_state4(self, s1).
             RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase,
@@ -274,7 +274,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % BEGIN RANDOM STATE CHANGES
 
     (isS_ERROR(s) ->
-        sum s1: State.((rsc(aArgs) && (isS_RAMPING(s1) || isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING_UP(s1) || isS_RAMPING_DOWN(s1) || isS_ON(s1) || isS_STANDBY(s1) || isS_OFF(s1))) ->
+        sum s1: State.((actArgs_rsc(aArgs) && (isS_RAMPING(s1) || isS_ERROR(s1) || isS_TRIPPED(s1) || isS_RAMPING_UP(s1) || isS_RAMPING_DOWN(s1) || isS_ON(s1) || isS_STANDBY(s1) || isS_OFF(s1))) ->
             ss43(self, parent, s1).
             move_state4(self, s1).
             RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase,
@@ -352,7 +352,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % BEGIN RANDOM STATE CHANGES
 
     (isS_RAMPING(s) ->
-        sum s1: State.((rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OFF(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1))) ->
+        sum s1: State.((actArgs_rsc(aArgs) && (isS_ERROR(s1) || isS_TRIPPED(s1) || isS_STANDBY(s1) || isS_ON(s1) || isS_OFF(s1) || isS_RAMPING_DOWN(s1) || isS_RAMPING_UP(s1))) ->
             ss43(self, parent, s1).
             move_state4(self, s1).
             RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase,
@@ -421,7 +421,7 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % (1.a) We have initialized and we have not yet received a command in this action phase.
     % We now accept notifications.
     sum id:Id.(sum s1:State.(((isActPhase(phase)) && (is_child(id, chs)) &&
-                             (pc(aArgs) == 0) && (initialized(chs))) ->
+                             (actArgs_pc(aArgs) == 0) && (initialized(chs))) ->
        rs54(id, self, s1).
        move_phase4(self, WhenPhase).
        RPC_Chamber_CLASS(self, parent, s, update_busy(id, false, update_state(id, s1, chs)), WhenPhase, reset(aArgs))))
@@ -433,8 +433,8 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % assuming a child does not send more than one notifications during the execution of the same
     % actions.
     sum id:Id.(sum s1:State.(((isActPhase(phase)) && (is_child(id, chs)) &&
-           ((pc(aArgs) > 0) ||
-            ((pc(aArgs) == -1) && (cq(aArgs) != [])))) ->
+           ((actArgs_pc(aArgs) > 0) ||
+            ((actArgs_pc(aArgs) == -1) && (actArgs_cq(aArgs) != [])))) ->
        rs54(id, self, s1).
        RPC_Chamber_CLASS(self, parent, s,
                      update_busy(id,
@@ -445,24 +445,24 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
 
     % Clause to send commands added by actions in the initialization phase. Note that
     % we keep track of the children which have not yet responded in the nrf list.
-    ((isActPhase(phase)) && (cq(aArgs) != []) && (!(initialized(chs)))) ->
-        sc45(self, id(head(cq(aArgs))), command(head(cq(aArgs)))).
+    ((isActPhase(phase)) && (actArgs_cq(aArgs) != []) && (!(initialized(chs)))) ->
+        sc45(self, childcommand_id(head(actArgs_cq(aArgs))), command(head(actArgs_cq(aArgs)))).
             RPC_Chamber_CLASS(self, parent, s,
-                          update_busy(id(head(cq(aArgs))), true, chs),
+                          update_busy(childcommand_id(head(actArgs_cq(aArgs))), true, chs),
                           phase,
-                          actArgs(tail(cq(aArgs)),
-                                  (id(head(cq(aArgs))))|>(nrf(aArgs)), pc(aArgs), rsc(aArgs))) +
+                          actArgs(tail(actArgs_cq(aArgs)),
+                                  (childcommand_id(head(actArgs_cq(aArgs))))|>(actArgs_nrf(aArgs)), actArgs_pc(aArgs), actArgs_rsc(aArgs))) +
 
 
     % Clause to send commands added by actions after the initialization phase. Note that
     % we don't keep track of the children which have not yet responded. Recepients are only
     % marked busy and not added to the nrf list.
-    ((isActPhase(phase)) && (cq(aArgs) != []) && initialized(chs)) ->
-        sc45(self, id(head(cq(aArgs))), command(head(cq(aArgs)))).
+    ((isActPhase(phase)) && (actArgs_cq(aArgs) != []) && initialized(chs)) ->
+        sc45(self, childcommand_id(head(actArgs_cq(aArgs))), command(head(actArgs_cq(aArgs)))).
             RPC_Chamber_CLASS(self, parent, s,
-                          update_busy(id(head(cq(aArgs))), true, chs),
+                          update_busy(childcommand_id(head(actArgs_cq(aArgs))), true, chs),
                           phase,
-                          actArgs(tail(cq(aArgs)), [], pc(aArgs), rsc(aArgs))) +
+                          actArgs(tail(actArgs_cq(aArgs)), [], actArgs_pc(aArgs), actArgs_rsc(aArgs))) +
 
 
     % (2) Clause to receive the new states from the children during initialization.
@@ -473,21 +473,21 @@ proc RPC_Chamber_CLASS(self: Id, parent: Id, s: State, chs: Children, phase: Pha
     % If a child sends two state messages, we will only consider the last
     % state when we process the when clauses.
     sum id:Id.(sum s1:State.(
-            ((isActPhase(phase)) && (cq(aArgs) == []) && (nrf(aArgs) != []) && (is_child(id, chs)) &&
+            ((isActPhase(phase)) && (actArgs_cq(aArgs) == []) && (actArgs_nrf(aArgs) != []) && (is_child(id, chs)) &&
              (!(initialized(chs)))) ->
                     rs54(id, self, s1).
                     ((initialized(update_state(id,s1,chs))) ->
                          end_initialization(self).
                          RPC_Chamber_CLASS(self, parent, s, update_state(id,s1,chs), phase,
-                                       actArgs(cq(aArgs), remove(id, nrf(aArgs)), -1, rsc(aArgs)
+                                       actArgs(actArgs_cq(aArgs), remove(id, actArgs_nrf(aArgs)), -1, actArgs_rsc(aArgs)
                                        )) <>
                          RPC_Chamber_CLASS(self, parent, s, update_state(id,s1,chs), phase,
-                                       actArgs(cq(aArgs), remove(id, nrf(aArgs)), -1, rsc(aArgs)
+                                       actArgs(actArgs_cq(aArgs), remove(id, actArgs_nrf(aArgs)), -1, actArgs_rsc(aArgs)
                                        ))))) +
 
     % Go to the when phase whenever all children are initialized, we executed an action
     % and there are no pending messages.
-    ((isActPhase(phase)) && (cq(aArgs) == []) && (initialized(chs)) && (pc(aArgs) == -1)) ->
+    ((isActPhase(phase)) && (actArgs_cq(aArgs) == []) && (initialized(chs)) && (actArgs_pc(aArgs) == -1)) ->
         move_phase4(self, WhenPhase).
         RPC_Chamber_CLASS(self, parent, s, chs, WhenPhase, reset(aArgs))
 

@@ -6,18 +6,18 @@ proc
     % C_ON even if all children are in the S_ON state.
     RPC_Wheel_CLASS_TM(self: Id, chs: Children) =
         % Issue a C_ON command.
-        sc12(self,id(head(chs)),C_ON).
-        sum s:State.(rs21(id(head(chs)),self,s)).
+        sc12(self,child_id(head(chs)),C_ON).
+        sum s:State.(rs21(child_id(head(chs)),self,s)).
         RPC_Wheel_CLASS_TM(self, tail(chs) <| head(chs) ) +
 
         % Issue a C_OFF command.
-        sc12(self,id(head(chs)),C_OFF).
-        sum s:State.(rs21(id(head(chs)),self,s)).
+        sc12(self,child_id(head(chs)),C_OFF).
+        sum s:State.(rs21(child_id(head(chs)),self,s)).
         RPC_Wheel_CLASS_TM(self, tail(chs) <| head(chs) ) +
 
         % Issue a C_STANDBY command.
-        sc12(self,id(head(chs)),C_STANDBY).
-        sum s:State.(rs21(id(head(chs)),self,s)).
+        sc12(self,child_id(head(chs)),C_STANDBY).
+        sum s:State.(rs21(child_id(head(chs)),self,s)).
         RPC_Wheel_CLASS_TM(self, tail(chs) <| head(chs) ) +
 
         % Accept notifications.

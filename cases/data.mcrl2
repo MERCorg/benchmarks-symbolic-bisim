@@ -2,15 +2,15 @@ sort
 
     Phase = struct WhenPhase ?isWhenPhase | ActionPhase ?isActPhase;
 
-    ActPhaseArgs = struct actArgs(cq: CommandQueue, nrf: IdList, pc: Int, rsc: Bool);
+    ActPhaseArgs = struct actArgs(actArgs_cq: CommandQueue, actArgs_nrf: IdList, actArgs_pc: Int, actArgs_rsc: Bool);
 
     Id = Nat;
     IdList = List(Id);
 
-    Child = struct child(id:Id, state:State, ptype:PType, busy:Bool);
+    Child = struct child(child_id:Id, state:State, ptype:PType, busy:Bool);
     Children = List(Child);
 
-    ChildCommand = struct childcommand(id:Id, command:Command);
+    ChildCommand = struct childcommand(childcommand_id:Id, command:Command);
     CommandQueue = List(ChildCommand);
 
 
