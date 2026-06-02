@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
  python3 \
  python3-pip \
  python3-psutil \ 
+ python3-venv \
  z3 \
 # Requires to install Rust
  curl
@@ -38,9 +39,14 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cd ~/merc/ \
     && cargo build --release -j${THREADS} --bin merc-sym
 
+# Install merc-py module, and create a virtual environment
+COPY merc-py /root/merc-py/
+
+RUN python3 -m venv /root/.venv && /root/.venv/bin/pip install /root/merc-py
+
 # Copy the experiments into the container
 COPY ./cases /root/cases/
 COPY ./scripts /root/scripts/
 
 # Run the prepare script to generate all the symbolic inputs
-RUN python3 /root/scripts/prepare.py --mcrl2-path /root/mCRL2/build/stage/bin/ --input-dir /root/cases/ --output-dir /root/input
+# RUN python3 /root/scripts/prepare.py --mcrl2-path /root/mCRL2/build/stage/bin/ --input-dir /root/cases/ --output-dir /root/input
