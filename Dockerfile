@@ -47,6 +47,3 @@ RUN python3 -m venv /root/.venv && /root/.venv/bin/pip install /root/merc-py
 # Copy the experiments into the container
 COPY ./cases /root/cases/
 COPY ./scripts /root/scripts/
-
-# Run the prepare script to generate all the symbolic inputs
-# RUN python3 /root/scripts/prepare.py --mcrl2-path /root/mCRL2/build/stage/bin/ --input-dir /root/cases/ --output-dir /root/input
