@@ -301,7 +301,7 @@ class Preparer:
             if not os.path.isfile(sym_file):
                 print("Generating {}...".format(sym_file))
                 result = subprocess.run(
-                    [self._find_mcrl2_tool("lpsreach"), "--memory-limit=64", "-v", lps_file, sym_file],
+                    [self._find_mcrl2_tool("lpsreach"), "--memory-limit=256", "-rjittyc", "--chaining", "--saturation", "--groups=simple", "--threads=8", "-v", lps_file, sym_file],
                     stdout=sys.stdout,
                     stderr=sys.stdout,
                     check=True,
