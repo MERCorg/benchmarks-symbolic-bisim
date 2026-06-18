@@ -31,7 +31,7 @@ def main():
     bench = Benchmarks(runs=args.runs, max_threads=args.max_threads, dump_dir=dump_dir)
     for lps_file in lps_files:
         name = str(lps_file.relative_to(args.sym_dir))
-        bench.add(name, merc_sym, ["reduce", "strong-bisim-sigref", str(lps_file)])
+        bench.add(name, merc_sym, ["reduce", "strong-bisim-sigref", "--timings", str(lps_file)], timeout=600)
 
     try:
         bench.run(args.output)
